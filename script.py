@@ -37,9 +37,12 @@ def generateCertificates(font_path):
     os.makedirs(font_output_folder, exist_ok=True)
 
     # Generate certificates for each name
+    value = 0
     for name in names:
+        value += 1
         # Convert name to title case
-        title_case_name = ' '.join(word.capitalize() for word in name.split())
+        title_case_name = str(value) + " - " + ' '.join(word.capitalize() for word in name.split())
+        name = ' '.join(word.capitalize() for word in name.split())
 
         # Create a copy of the input image
         certificate = image.copy()
@@ -48,13 +51,13 @@ def generateCertificates(font_path):
         draw = ImageDraw.Draw(certificate)
 
         # Calculate the text width and height for center alignment
-        text_bbox = font.getbbox(title_case_name)
+        text_bbox = font.getbbox(name)
         text_width = text_bbox[2] - text_bbox[0]
         image_width, image_height = certificate.size
         x = (image_width - text_width) // 2
 
         # Add the name in title case to the certificate with center alignment
-        draw.text((x, Y_COORDINATE), title_case_name, fill=TEXT_COLOR, font=font)
+        draw.text((x, Y_COORDINATE), name, fill=TEXT_COLOR, font=font)
 
         # Save the individual certificate
         output_path = os.path.join(font_output_folder, f"{title_case_name}.png")
